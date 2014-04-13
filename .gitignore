@@ -1,0 +1,15 @@
+#Working Dir
+objs/
+lib/
+
+#TARGET
+*_tests
+*.exe
+*.exe.*
+
+#formatter files
+*.uncrustify
+
+#gcov
+gcov/
+*_tests.txt
