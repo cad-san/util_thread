@@ -11,8 +11,14 @@ TEST_GROUP(UtilThread)
         thread = new UtilThread();
     }
 
-    void terdown()
+    void teardown()
     {
         delete thread;
     }
 };
+
+TEST(UtilThread, Create)
+{
+    CHECK_EQUAL(false, thread->isReady());
+    CHECK_EQUAL(false, thread->isActive());
+}

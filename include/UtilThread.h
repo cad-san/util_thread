@@ -6,6 +6,9 @@ class UtilThread
 public:
     UtilThread();
     ~UtilThread();
+
+    bool isReady() const;
+    bool isActive() const;
 };
 
 #endif
