@@ -24,3 +24,15 @@ INCLUDE_DIRS = \
 
 MOCKS_SRC_DIRS = \
 	$(PROJECT_HOME_DIR)/mocks\
+
+#--- Librarys ---#
+LIBRARY_DIRS = \
+
+LIBRARY_FILES = \
+
+#--- Configs ---#
+
+CPPWARNINGFLAGS = \
+	-Wall -W -Werror -pedantic-errors\
+	-Wcast-qual -Wcast-align -Wwrite-strings\
+	-Wconversion -Wfloat-equal -Wpointer-arith\
