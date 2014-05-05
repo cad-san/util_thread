@@ -34,13 +34,24 @@ bool UtilThread::stop()
 {
     requestStopping();
     waitStopping();
-    this->active_flag_ = false;
     return true;
 }
 
 void UtilThread::main()
 {
+    /* スレッド開始 */
     notifyStarting();
+    for(;;)
+    {
+        if(finish_flag_)
+            break;
+
+        const struct timespec wait_time = {0, 100 * 1000};
+        nanosleep(&wait_time, NULL);
+    }
+
+    /* スレッド終了 */
+    notifyStopping();
     return;
 }
 
