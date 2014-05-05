@@ -22,3 +22,12 @@ TEST(UtilThread, Create)
     CHECK_EQUAL(false, thread->isReady());
     CHECK_EQUAL(false, thread->isActive());
 }
+
+TEST(UtilThread, Init)
+{
+    bool result = thread->init();
+
+    CHECK_EQUAL(true, result);
+    CHECK_EQUAL(true, thread->isReady());
+    CHECK_EQUAL(false, thread->isActive());
+}

@@ -1,6 +1,8 @@
 #include "UtilThread.h"
 
-UtilThread::UtilThread()
+UtilThread::UtilThread() :
+    ready_flag_(false),
+    active_flag_(false)
 {
 }
 
@@ -8,12 +10,18 @@ UtilThread::~UtilThread()
 {
 }
 
+bool UtilThread::init()
+{
+    this->ready_flag_ = true;
+    return true;
+}
+
 bool UtilThread::isReady() const
 {
-    return false;
+    return this->ready_flag_;
 }
 
 bool UtilThread::isActive() const
 {
-    return false;
+    return this->active_flag_;
 }

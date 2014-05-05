@@ -3,9 +3,14 @@
 
 class UtilThread
 {
+private:
+    bool ready_flag_;
+    bool active_flag_;
 public:
     UtilThread();
     ~UtilThread();
+
+    bool init();
 
     bool isReady() const;
     bool isActive() const;
