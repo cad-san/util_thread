@@ -11,15 +11,21 @@ private:
     bool finish_flag_;
 
     pthread_t main_thread_;
-    pthread_mutex_t msg_guard_;
+    pthread_mutex_t status_guard_;
 
     pthread_cond_t active_req_;
     pthread_cond_t finish_req_;
 
+    /* mutex制御 */
+    void statusLock();
+    void statusUnlock();
+
+    /* スレッド開始処理 */
     void requestStarting();
     void waitStarting();
     void notifyStarting();
 
+    /* スレッド終了処理 */
     void requestStopping();
     void waitStopping();
     void notifyStopping();
