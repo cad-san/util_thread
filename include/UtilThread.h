@@ -12,6 +12,7 @@ public:
 
     bool init();
     bool start();
+    bool stop();
 
     bool isReady() const;
     bool isActive() const;

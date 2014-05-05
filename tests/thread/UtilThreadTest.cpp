@@ -41,3 +41,15 @@ TEST(UtilThread, Start)
     CHECK_EQUAL(true, ret_start);
     CHECK_EQUAL(true, thread->isActive());
 }
+
+TEST(UtilThread, Stop)
+{
+    bool ret_init = thread->init();
+    bool ret_start = thread->start();
+    bool ret_stop = thread->stop();
+
+    CHECK_EQUAL(true, ret_init);
+    CHECK_EQUAL(true, ret_start);
+    CHECK_EQUAL(true, ret_stop);
+    CHECK_EQUAL(false, thread->isActive());
+}
