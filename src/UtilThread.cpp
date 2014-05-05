@@ -16,6 +16,12 @@ bool UtilThread::init()
     return true;
 }
 
+bool UtilThread::start()
+{
+    this->active_flag_ = true;
+    return true;
+}
+
 bool UtilThread::isReady() const
 {
     return this->ready_flag_;

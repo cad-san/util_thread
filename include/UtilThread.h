@@ -11,6 +11,7 @@ public:
     ~UtilThread();
 
     bool init();
+    bool start();
 
     bool isReady() const;
     bool isActive() const;
