@@ -8,15 +8,21 @@ class UtilThread
 private:
     bool ready_flag_;
     bool active_flag_;
+    bool finish_flag_;
 
     pthread_t main_thread_;
     pthread_mutex_t msg_guard_;
 
     pthread_cond_t active_req_;
+    pthread_cond_t finish_req_;
 
     void requestStarting();
     void waitStarting();
     void notifyStarting();
+
+    void requestStopping();
+    void waitStopping();
+    void notifyStopping();
 
     /* スレッドのメイン関数 */
     void main();

@@ -2,7 +2,8 @@
 
 UtilThread::UtilThread() :
     ready_flag_(false),
-    active_flag_(false)
+    active_flag_(false),
+    finish_flag_(false)
 {
     pthread_mutex_init(&msg_guard_, NULL);
 }
@@ -14,8 +15,11 @@ UtilThread::~UtilThread()
 bool UtilThread::init()
 {
     pthread_cond_init(&active_req_, NULL);
+    pthread_cond_init(&finish_req_, NULL);
 
     this->ready_flag_ = true;
+    this->active_flag_ = false;
+    this->finish_flag_ = false;
     return true;
 }
 
@@ -28,6 +32,8 @@ bool UtilThread::start()
 
 bool UtilThread::stop()
 {
+    requestStopping();
+    waitStopping();
     this->active_flag_ = false;
     return true;
 }
@@ -55,6 +61,29 @@ void UtilThread::notifyStarting()
 {
     pthread_mutex_lock(&msg_guard_);
     this->active_flag_ = true;
+    pthread_mutex_unlock(&msg_guard_);
+
+    pthread_cond_signal(&this->active_req_);
+}
+
+void UtilThread::requestStopping()
+{
+    pthread_mutex_lock(&msg_guard_);
+    this->finish_flag_ = true;
+    pthread_mutex_unlock(&msg_guard_);
+
+    pthread_cond_signal(&this->finish_req_);
+}
+
+void UtilThread::waitStopping()
+{
+    pthread_join(this->main_thread_, NULL);
+}
+
+void UtilThread::notifyStopping()
+{
+    pthread_mutex_lock(&msg_guard_);
+    this->active_flag_ = false;
     pthread_mutex_unlock(&msg_guard_);
 
     pthread_cond_signal(&this->active_req_);
