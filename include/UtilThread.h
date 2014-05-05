@@ -20,6 +20,13 @@ private:
     void statusLock();
     void statusUnlock();
 
+    /* フラグ制御 */
+    void setReadyFlag(bool flag);
+    void setActiveFlag(bool flag);
+    void setFinishFlag(bool flag);
+
+    bool needToFinish() const;
+
     /* スレッド開始処理 */
     void requestStarting();
     void waitStarting();

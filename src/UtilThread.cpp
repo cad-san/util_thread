@@ -17,9 +17,9 @@ bool UtilThread::init()
     pthread_cond_init(&active_req_, NULL);
     pthread_cond_init(&finish_req_, NULL);
 
-    this->ready_flag_ = true;
-    this->active_flag_ = false;
-    this->finish_flag_ = false;
+    setReadyFlag(true);
+    setActiveFlag(false);
+    setFinishFlag(false);
     return true;
 }
 
@@ -43,7 +43,7 @@ void UtilThread::main()
     notifyStarting();
     for(;;)
     {
-        if(finish_flag_)
+        if(needToFinish())
             break;
 
         const struct timespec wait_time = {0, 100 * 1000};
@@ -80,19 +80,13 @@ void UtilThread::waitStarting()
 
 void UtilThread::notifyStarting()
 {
-    statusLock();
-    this->active_flag_ = true;
-    statusUnlock();
-
+    setActiveFlag(true);
     pthread_cond_signal(&this->active_req_);
 }
 
 void UtilThread::requestStopping()
 {
-    statusLock();
-    this->finish_flag_ = true;
-    statusUnlock();
-
+    setFinishFlag(true);
     pthread_cond_signal(&this->finish_req_);
 }
 
@@ -103,11 +97,29 @@ void UtilThread::waitStopping()
 
 void UtilThread::notifyStopping()
 {
-    statusLock();
-    this->active_flag_ = false;
-    statusUnlock();
-
+    setActiveFlag(false);
     pthread_cond_signal(&this->active_req_);
+}
+
+void UtilThread::setReadyFlag(bool flag)
+{
+    statusLock();
+    this->ready_flag_ = flag;
+    statusUnlock();
+}
+
+void UtilThread::setActiveFlag(bool flag)
+{
+    statusLock();
+    this->active_flag_ = flag;
+    statusUnlock();
+}
+
+void UtilThread::setFinishFlag(bool flag)
+{
+    statusLock();
+    this->finish_flag_ = flag;
+    statusUnlock();
 }
 
 bool UtilThread::isReady() const
@@ -118,6 +130,11 @@ bool UtilThread::isReady() const
 bool UtilThread::isActive() const
 {
     return this->active_flag_;
+}
+
+bool UtilThread::needToFinish() const
+{
+    return this->finish_flag_;
 }
 
 void* UtilThread::launcher(void* obj)
