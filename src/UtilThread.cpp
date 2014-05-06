@@ -43,15 +43,23 @@ bool UtilThread::stop()
 
 void UtilThread::main()
 {
+    UtilTime expect_time = getBaseTime();
+
     /* スレッド開始 */
     notifyStarting();
     for(;;)
     {
+        /* 終了判定 */
         if(needToFinish())
             break;
 
-        const struct timespec wait_time = {0, 100 * 1000};
-        nanosleep(&wait_time, NULL);
+        statusLock();
+
+        /* Intervalに基づき待機 */
+        expect_time = getNextTime(expect_time);
+        pthread_cond_timedwait(&finish_req_, &status_guard_, &expect_time);
+
+        statusUnlock();
     }
 
     /* スレッド終了 */
