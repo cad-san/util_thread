@@ -1,5 +1,9 @@
 #include "UtilThread.h"
 
+#include <time.h>
+
+static const int INTERVAL_TIME = 500;
+
 UtilThread::UtilThread() :
     ready_flag_(false),
     active_flag_(false),
@@ -142,4 +146,26 @@ void* UtilThread::launcher(void* obj)
     UtilThread* thread = reinterpret_cast<UtilThread *>(obj);
     thread->main();
     return NULL;
+}
+
+void UtilThread::setIntervalMiliSec(const int interval_msec)
+{
+    interval_ = static_cast<double>(interval_msec) / 1000;
+}
+
+const UtilTime UtilThread::getIntervalTime() const
+{
+    return interval_;
+}
+
+const UtilTime UtilThread::getBaseTime() const
+{
+    UtilTime base;
+    clock_gettime(CLOCK_REALTIME, &base);
+    return base;
+}
+
+const UtilTime UtilThread::getNextTime(const UtilTime& base) const
+{
+    return base + interval_;
 }

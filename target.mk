@@ -30,6 +30,8 @@ MOCKS_SRC_DIRS = \
 LIBRARY_DIRS = \
 
 LIBRARY_FILES = \
+	-lpthread\
+	-lrt\
 
 #--- Configs ---#
 

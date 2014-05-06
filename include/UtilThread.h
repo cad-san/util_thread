@@ -1,6 +1,8 @@
 #ifndef D_UTIL_THREAD_H
 #define D_UTIL_THREAD_H
 
+#include "UtilTime.h"
+
 #include <pthread.h>
 
 class UtilThread
@@ -15,6 +17,8 @@ private:
 
     pthread_cond_t active_req_;
     pthread_cond_t finish_req_;
+
+    UtilTime interval_;
 
     /* mutex制御 */
     void statusLock();
@@ -53,6 +57,13 @@ public:
 
     bool isReady() const;
     bool isActive() const;
+
+    void setIntervalMiliSec(const int interval_msec);
+
+    const UtilTime getIntervalTime() const;
+
+    const UtilTime getBaseTime() const;
+    const UtilTime getNextTime(const UtilTime& base) const;
 };
 
 #endif

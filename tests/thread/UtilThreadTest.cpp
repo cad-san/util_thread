@@ -53,3 +53,24 @@ TEST(UtilThread, Stop)
     CHECK_EQUAL(true, ret_stop);
     CHECK_EQUAL(false, thread->isActive());
 }
+
+TEST(UtilThread, Interval)
+{
+    UtilTime result;
+    thread->setIntervalMiliSec( 500 );
+    result = thread->getIntervalTime();
+
+    LONGS_EQUAL(0, result.tv_sec);
+    LONGS_EQUAL(500 * UtilTime::MSEC_BASE, result.tv_nsec);
+}
+
+TEST(UtilThread, NextTime)
+{
+    thread->setIntervalMiliSec( 500 );
+    UtilTime base = thread->getBaseTime();
+    UtilTime expect = base + 0.5;
+    UtilTime actual = thread->getNextTime(base);
+
+    LONGS_EQUAL(expect.tv_sec, actual.tv_sec);
+    LONGS_EQUAL(expect.tv_nsec, actual.tv_nsec);
+}
