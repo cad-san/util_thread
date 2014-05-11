@@ -4,10 +4,11 @@
 
 static const int INTERVAL_TIME = 500;
 
-UtilThread::UtilThread() :
+UtilThread::UtilThread(const RunnerPtr& runner) :
     ready_flag_(false),
     active_flag_(false),
-    finish_flag_(false)
+    finish_flag_(false),
+    runner_(runner)
 {
     pthread_mutex_init(&status_guard_, NULL);
 }
@@ -20,6 +21,9 @@ bool UtilThread::init()
 {
     pthread_cond_init(&active_req_, NULL);
     pthread_cond_init(&finish_req_, NULL);
+
+    if(runner_)
+        runner_->init();
 
     setReadyFlag(true);
     setActiveFlag(false);
@@ -54,6 +58,10 @@ void UtilThread::main()
             break;
 
         statusLock();
+
+        /* 実処理の実施 */
+        if(runner_)
+            runner_->step();
 
         /* Intervalに基づき待機 */
         expect_time = getNextTime(expect_time);

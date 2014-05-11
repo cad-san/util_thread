@@ -2,6 +2,7 @@
 #define D_UTIL_THREAD_H
 
 #include "UtilTime.h"
+#include "UtilRunner.h"
 
 #include <pthread.h>
 
@@ -19,6 +20,7 @@ private:
     pthread_cond_t finish_req_;
 
     UtilTime interval_;
+    RunnerPtr runner_;
 
     /* mutex制御 */
     void statusLock();
@@ -48,7 +50,7 @@ private:
     static void* launcher(void *obj);
 
 public:
-    UtilThread();
+    UtilThread(const RunnerPtr& runner);
     ~UtilThread();
 
     bool init();

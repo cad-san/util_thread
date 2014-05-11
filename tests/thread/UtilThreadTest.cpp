@@ -11,12 +11,18 @@ TEST_GROUP(UtilThread)
     void setup()
     {
         runner = std::make_shared<MockRunner>();
-        thread = new UtilThread();
+        thread = new UtilThread(runner);
     }
 
     void teardown()
     {
         delete thread;
+    }
+
+    void waitFirstStep()
+    {
+        UtilTime expect_time = thread->getNextTime(thread->getBaseTime());
+        runner->waitPerforming(expect_time);
     }
 };
 
@@ -33,6 +39,7 @@ TEST(UtilThread, Init)
     CHECK_EQUAL(true, result);
     CHECK_EQUAL(true, thread->isReady());
     CHECK_EQUAL(false, thread->isActive());
+    CHECK_EQUAL(true, runner->initialized());
 }
 
 TEST(UtilThread, Start)
@@ -43,18 +50,23 @@ TEST(UtilThread, Start)
     CHECK_EQUAL(true, ret_init);
     CHECK_EQUAL(true, ret_start);
     CHECK_EQUAL(true, thread->isActive());
+
+    waitFirstStep(); // step()が実行されるまで待つ
+    CHECK_EQUAL(true, runner->performed());
 }
 
 TEST(UtilThread, Stop)
 {
     bool ret_init = thread->init();
     bool ret_start = thread->start();
+    waitFirstStep();
     bool ret_stop = thread->stop();
 
     CHECK_EQUAL(true, ret_init);
     CHECK_EQUAL(true, ret_start);
     CHECK_EQUAL(true, ret_stop);
     CHECK_EQUAL(false, thread->isActive());
+    CHECK_EQUAL(true, runner->performed());
 }
 
 TEST(UtilThread, Interval)
