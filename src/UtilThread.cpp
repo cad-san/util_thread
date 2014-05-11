@@ -15,10 +15,16 @@ UtilThread::UtilThread(const RunnerPtr& runner) :
 
 UtilThread::~UtilThread()
 {
+    if(isActive())
+        stop();
 }
 
 bool UtilThread::init()
 {
+    /* Activeのとき無効 */
+    if(isActive())
+        return false;
+
     pthread_cond_init(&active_req_, NULL);
     pthread_cond_init(&finish_req_, NULL);
 
@@ -33,6 +39,14 @@ bool UtilThread::init()
 
 bool UtilThread::start()
 {
+    /* Activeのとき無効 */
+    if(isActive())
+        return false;
+
+    /* 未初期化時無効 */
+    if(!isReady())
+        return false;
+
     requestStarting();
     waitStarting();
     return true;
@@ -40,6 +54,10 @@ bool UtilThread::start()
 
 bool UtilThread::stop()
 {
+    /* Activeでないときは無効 */
+    if(!isActive())
+        return false;
+
     requestStopping();
     waitStopping();
     return true;
@@ -87,6 +105,7 @@ void UtilThread::statusUnlock()
 
 void UtilThread::requestStarting()
 {
+    setFinishFlag(false);
     pthread_create(&this->main_thread_, NULL, UtilThread::launcher, this);
 }
 

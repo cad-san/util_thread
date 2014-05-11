@@ -19,6 +19,14 @@ TEST_GROUP(UtilThread)
         delete thread;
     }
 
+    void destroyThead()
+    {
+        if(thread == NULL)
+            return;
+        delete thread;
+        thread = NULL;
+    }
+
     void waitFirstStep()
     {
         UtilTime expect_time = thread->getNextTime(thread->getBaseTime());
@@ -88,4 +96,109 @@ TEST(UtilThread, NextTime)
 
     LONGS_EQUAL(expect.tv_sec, actual.tv_sec);
     LONGS_EQUAL(expect.tv_nsec, actual.tv_nsec);
+}
+
+TEST(UtilThread, StartWithoutInit)
+{
+    bool ret_start = thread->start();
+
+    CHECK_EQUAL(false, ret_start);
+    CHECK_EQUAL(false, thread->isActive());
+
+    bool ret_stop = thread->stop();
+    CHECK_EQUAL(false, ret_stop);
+    CHECK_EQUAL(false, thread->isActive());
+
+    CHECK_EQUAL(false, runner->initialized());
+    CHECK_EQUAL(false, runner->performed());
+}
+
+TEST(UtilThread, StartUntilActive)
+{
+    bool ret_init, ret_start;
+
+    ret_init = thread->init();
+    CHECK_EQUAL(true, ret_init);
+    CHECK_EQUAL(true, thread->isReady());
+
+    ret_start = thread->start();
+    CHECK_EQUAL(true, ret_start);
+    CHECK_EQUAL(true, thread->isActive());
+
+    ret_start = thread->start();
+    CHECK_EQUAL(false, ret_start);
+    CHECK_EQUAL(true, thread->isActive());
+}
+
+TEST(UtilThread, StopWithoutStart)
+{
+    bool ret_init, ret_stop;
+
+    ret_init = thread->init();
+    CHECK_EQUAL(true, ret_init);
+    CHECK_EQUAL(true, thread->isReady());
+
+    ret_stop = thread->stop();
+    CHECK_EQUAL(false, ret_stop);
+    CHECK_EQUAL(false, thread->isActive());
+
+    CHECK_EQUAL(true, runner->initialized());
+    CHECK_EQUAL(false, runner->performed());
+}
+
+TEST(UtilThread, WithoutStop)
+{
+    bool ret_init, ret_start;
+    ret_init = thread->init();
+    CHECK_EQUAL(true, ret_init);
+    CHECK_EQUAL(true, thread->isReady());
+
+    ret_start = thread->start();
+    CHECK_EQUAL(true, ret_start);
+    CHECK_EQUAL(true, thread->isActive());
+
+    waitFirstStep(); // step()が実行されるまで待つ
+
+    destroyThead(); // stop()を呼ばずにdelete
+
+    CHECK_EQUAL(true, runner->initialized());
+    CHECK_EQUAL(true, runner->performed());
+}
+
+TEST(UtilThread, InitAfterStarted)
+{
+    bool ret_init, ret_start, ret_stop;
+
+    ret_init = thread->init();
+    ret_start = thread->start();
+
+    CHECK_EQUAL(true, ret_init);
+    CHECK_EQUAL(true, ret_start);
+
+    ret_init = thread->init();
+    CHECK_EQUAL(false, ret_init);
+
+    ret_stop = thread->stop();
+    CHECK_EQUAL(true, ret_stop);
+}
+
+TEST(UtilThread, Start2ndTime)
+{
+    bool ret_init, ret_start, ret_stop;
+
+    ret_init = thread->init();
+    ret_start = thread->start();
+    ret_stop = thread->stop();
+
+    CHECK_EQUAL(true, ret_init);
+    CHECK_EQUAL(true, ret_start);
+    CHECK_EQUAL(true, ret_stop);
+
+    ret_start = thread->start();
+    CHECK_EQUAL(true, ret_start);
+    CHECK_EQUAL(true, thread->isActive());
+
+    ret_stop = thread->stop();
+    CHECK_EQUAL(true, ret_stop);
+    CHECK_EQUAL(false, thread->isActive());
 }
