@@ -12,6 +12,7 @@ SRC_DIRS = \
 
 TEST_SRC_DIRS = \
 	$(PROJECT_HOME_DIR)/tests\
+	$(PROJECT_HOME_DIR)/tests/thread\
 
 INC_DIRS = \
 	$(PROJECT_HOME_DIR)/include\
@@ -29,6 +30,8 @@ MOCKS_SRC_DIRS = \
 LIBRARY_DIRS = \
 
 LIBRARY_FILES = \
+	-lpthread\
+	-lrt\
 
 #--- Configs ---#
 
@@ -36,3 +39,6 @@ CPPWARNINGFLAGS = \
 	-Wall -W -Werror -pedantic-errors\
 	-Wcast-qual -Wcast-align -Wwrite-strings\
 	-Wconversion -Wfloat-equal -Wpointer-arith\
+
+CPPOPTIONFLAGS = \
+	-std=c++11
