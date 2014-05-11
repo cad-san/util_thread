@@ -19,6 +19,7 @@ public:
     static const int NSEC_BASE;
 
     UtilTime();
+    UtilTime(const UtilTime& rhs);
     virtual ~UtilTime();
 
     UtilTime operator+(const UtilTime& time) const;

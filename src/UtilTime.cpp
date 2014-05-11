@@ -10,6 +10,12 @@ UtilTime::UtilTime()
     this->tv_nsec = 0;
 }
 
+UtilTime::UtilTime(const UtilTime& rhs)
+{
+    this->tv_sec = rhs.tv_sec;
+    this->tv_nsec = rhs.tv_nsec;
+}
+
 UtilTime::~UtilTime()
 {
 }
