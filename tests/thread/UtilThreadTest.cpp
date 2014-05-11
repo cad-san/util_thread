@@ -1,13 +1,16 @@
 #include "CppUTest/TestHarness.h"
 
 #include "UtilThread.h"
+#include "MockRunner.h"
 
 TEST_GROUP(UtilThread)
 {
+    MockRunnerPtr runner;
     UtilThread* thread;
 
     void setup()
     {
+        runner = std::make_shared<MockRunner>();
         thread = new UtilThread();
     }
 
