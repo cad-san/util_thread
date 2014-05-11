@@ -6,8 +6,8 @@
 struct UtilTime : timespec
 {
 private:
-    typedef int util_sec;
-    typedef int util_nsec;
+    typedef time_t util_sec;
+    typedef long util_nsec;
 
     util_sec add_sec(const UtilTime& base, const UtilTime& addition) const;
     util_nsec add_nsec(const UtilTime& base, const UtilTime& addition) const;

@@ -17,13 +17,15 @@ UtilTime::~UtilTime()
 UtilTime::util_sec
 UtilTime::add_sec(const UtilTime& base, const UtilTime& addition) const
 {
-    return (base.tv_sec + addition.tv_sec) + (base.tv_nsec + addition.tv_nsec) / NSEC_BASE;
+    UtilTime::util_sec result = static_cast<UtilTime::util_sec>(base.tv_sec + addition.tv_sec);
+    result += static_cast<UtilTime::util_sec>((base.tv_nsec + addition.tv_nsec) / NSEC_BASE);
+    return result;
 }
 
 UtilTime::util_nsec
 UtilTime::add_nsec(const UtilTime& base, const UtilTime& addition) const
 {
-    return (base.tv_nsec + addition.tv_nsec) % NSEC_BASE;
+    return static_cast<UtilTime::util_nsec>((base.tv_nsec + addition.tv_nsec) % NSEC_BASE);
 }
 
 const UtilTime
