@@ -10,6 +10,12 @@ UtilTime::UtilTime()
     this->tv_nsec = 0;
 }
 
+UtilTime::UtilTime(const UtilTime& rhs)
+{
+    this->tv_sec = rhs.tv_sec;
+    this->tv_nsec = rhs.tv_nsec;
+}
+
 UtilTime::~UtilTime()
 {
 }
@@ -17,13 +23,15 @@ UtilTime::~UtilTime()
 UtilTime::util_sec
 UtilTime::add_sec(const UtilTime& base, const UtilTime& addition) const
 {
-    return (base.tv_sec + addition.tv_sec) + (base.tv_nsec + addition.tv_nsec) / NSEC_BASE;
+    UtilTime::util_sec result = static_cast<UtilTime::util_sec>(base.tv_sec + addition.tv_sec);
+    result += static_cast<UtilTime::util_sec>((base.tv_nsec + addition.tv_nsec) / NSEC_BASE);
+    return result;
 }
 
 UtilTime::util_nsec
 UtilTime::add_nsec(const UtilTime& base, const UtilTime& addition) const
 {
-    return (base.tv_nsec + addition.tv_nsec) % NSEC_BASE;
+    return static_cast<UtilTime::util_nsec>((base.tv_nsec + addition.tv_nsec) % NSEC_BASE);
 }
 
 const UtilTime

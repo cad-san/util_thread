@@ -11,6 +11,7 @@ UtilThread::UtilThread(const RunnerPtr& runner) :
     runner_(runner)
 {
     pthread_mutex_init(&status_guard_, NULL);
+    setIntervalMiliSec(INTERVAL_TIME);
 }
 
 UtilThread::~UtilThread()

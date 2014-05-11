@@ -41,4 +41,4 @@ CPPWARNINGFLAGS = \
 	-Wconversion -Wfloat-equal -Wpointer-arith\
 
 CPPOPTIONFLAGS = \
-	-std=c++11
+	-std=c++0x -Wno-c++98-compat
