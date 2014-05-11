@@ -39,3 +39,6 @@ CPPWARNINGFLAGS = \
 	-Wall -W -Werror -pedantic-errors\
 	-Wcast-qual -Wcast-align -Wwrite-strings\
 	-Wconversion -Wfloat-equal -Wpointer-arith\
+
+CPPOPTIONFLAGS = \
+	-std=c++11
