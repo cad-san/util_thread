@@ -16,7 +16,7 @@ bool IpcSockCliant::init()
 {
     struct sockaddr_un addr;
     addr.sun_family = AF_UNIX;
-    strncpy(addr.sun_path, path_.c_str(), UNIX_PATH_MAX);
+    strncpy(addr.sun_path, path_.c_str(), sizeof(addr.sun_path));
     addr_ = addr;
 
     return true;
