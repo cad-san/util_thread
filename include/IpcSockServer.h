@@ -1,6 +1,7 @@
 #ifndef D_IPC_SOCK_SERVER_H
 #define D_IPC_SOCK_SERVER_H
 
+#include "IpcServer.h"
 #include "UtilTime.h"
 
 #include <string>
@@ -8,7 +9,7 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 
-class IpcSockServer
+class IpcSockServer : public IpcServer
 {
 public:
     static const int DEFAULT_QUEUE_SIZE;

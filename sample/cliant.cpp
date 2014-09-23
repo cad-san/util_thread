@@ -8,28 +8,28 @@
 
 int main(void)
 {
-	std::cout << "start cliant" << std::endl;
+    std::cout << "start cliant" << std::endl;
 
- 	while(1)
- 	{
-		std::string str;
-		std::cout << "input message : ";
-		std::getline(std::cin, str);
-		
-		if(str.empty())
-			continue;
+    while(1)
+    {
+        std::string str;
+        std::cout << "input message : ";
+        std::getline(std::cin, str);
 
-		IpcSockCliant sock(SOCK_PATH);
+        if(str.empty())
+            continue;
 
-		sock.init();
+        IpcSockCliant sock(SOCK_PATH);
 
-		if(sock.start()) {
-			sock.send(str.c_str(), str.size());
-			sock.stop();
-		}
-		else {
-			break;
-		}
-	}
+        sock.init();
+
+        if(sock.start()) {
+            sock.send(str.c_str(), str.size());
+            sock.stop();
+        }
+        else {
+            break;
+        }
+    }
     return 0;
 }
