@@ -17,7 +17,7 @@ public:
 private:
     /* config */
     const std::string path_;
-    const size_t queue_size_;
+    const int queue_size_;
 
     /* timeout */
     const UtilTime timeout_;
@@ -27,7 +27,7 @@ private:
     struct sockaddr_un addr_;
 
 public:
-    IpcSockServer(const std::string& path, const size_t queue_size, const UtilTime& timeout);
+    IpcSockServer(const std::string& path, const int queue_size, const UtilTime& timeout);
     virtual ~IpcSockServer();
 
     bool init();

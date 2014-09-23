@@ -4,7 +4,7 @@
 #include <unistd.h>
 
 IpcSockServer::IpcSockServer(const std::string& path,
-                             const size_t queue_size, const UtilTime& timeout) :
+                             const int queue_size, const UtilTime& timeout) :
     path_(path),
     queue_size_(queue_size),
     timeout_(timeout)
