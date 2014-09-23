@@ -1,6 +1,7 @@
 #ifndef D_IPC_SOCK_CLIANT_H
 #define D_IPC_SOCK_CLIANT_H
 
+#include "IpcCliant.h"
 #include "UtilTime.h"
 
 #include <string>
@@ -8,7 +9,7 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 
-class IpcSockCliant
+class IpcSockCliant : public IpcCliant
 {
 private:
     /* config */
