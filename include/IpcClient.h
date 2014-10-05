@@ -1,11 +1,11 @@
-#ifndef D_IPC_CLIANT_H
-#define D_IPC_CLIANT_H
+#ifndef D_IPC_CLIENT_H
+#define D_IPC_CLIENT_H
 
 #include <sys/types.h>
 
-class IpcCliant {
+class IpcClient {
 public:
-    virtual ~IpcCliant(){}
+    virtual ~IpcClient(){}
 
     virtual bool init() = 0;
     virtual bool start() = 0;

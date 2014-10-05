@@ -1,4 +1,4 @@
-#include "IpcSockCliant.h"
+#include "IpcSockClient.h"
 
 #include <string>
 #include <iostream>
@@ -8,7 +8,7 @@
 
 int main(void)
 {
-    std::cout << "start cliant" << std::endl;
+    std::cout << "start client" << std::endl;
 
     while(1)
     {
@@ -19,7 +19,7 @@ int main(void)
         if(str.empty())
             continue;
 
-        IpcSockCliant sock(SOCK_PATH);
+        IpcSockClient sock(SOCK_PATH);
 
         sock.init();
 

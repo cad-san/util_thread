@@ -1,7 +1,7 @@
-#ifndef D_IPC_SOCK_CLIANT_H
-#define D_IPC_SOCK_CLIANT_H
+#ifndef D_IPC_SOCK_CLIENT_H
+#define D_IPC_SOCK_CLIENT_H
 
-#include "IpcCliant.h"
+#include "IpcClient.h"
 #include "UtilTime.h"
 
 #include <string>
@@ -9,7 +9,7 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 
-class IpcSockCliant : public IpcCliant
+class IpcSockClient : public IpcClient
 {
 private:
     /* config */
@@ -20,8 +20,8 @@ private:
     struct sockaddr_un addr_;
 
 public:
-    IpcSockCliant(const std::string& path);
-    virtual ~IpcSockCliant();
+    IpcSockClient(const std::string& path);
+    virtual ~IpcSockClient();
 
     bool init();
     bool start();
