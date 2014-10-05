@@ -19,8 +19,8 @@ set(LIBS util_thread pthread rt)
 include_directories(${INC_DIR})
 link_directories(${LIB_DIR})
 
-add_executable (cliant cliant.cpp)
+add_executable (client client.cpp)
 add_executable (server server.cpp)
 
-target_link_libraries(cliant ${LIBS})
+target_link_libraries(client ${LIBS})
 target_link_libraries(server ${LIBS})
