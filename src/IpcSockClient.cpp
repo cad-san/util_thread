@@ -1,18 +1,18 @@
-#include "IpcSockCliant.h"
+#include "IpcSockClient.h"
 
 #include <stdio.h>
 #include <unistd.h>
 
-IpcSockCliant::IpcSockCliant(const std::string& path) :
+IpcSockClient::IpcSockClient(const std::string& path) :
     path_(path)
 {
 }
 
-IpcSockCliant::~IpcSockCliant()
+IpcSockClient::~IpcSockClient()
 {
 }
 
-bool IpcSockCliant::init()
+bool IpcSockClient::init()
 {
     struct sockaddr_un addr;
     addr.sun_family = AF_UNIX;
@@ -22,7 +22,7 @@ bool IpcSockCliant::init()
     return true;
 }
 
-bool IpcSockCliant::start()
+bool IpcSockClient::start()
 {
     /* ソケット作成 */
     int sock = socket(AF_UNIX, SOCK_STREAM, 0);
@@ -47,13 +47,13 @@ FAIL:
     return false;
 }
 
-bool IpcSockCliant::stop()
+bool IpcSockClient::stop()
 {
     close(sock_);
     return false;
 }
 
-ssize_t IpcSockCliant::send(const char buffer[], const size_t size)
+ssize_t IpcSockClient::send(const char buffer[], const size_t size)
 {
     ssize_t send_size = write(sock_, buffer, size);
 
