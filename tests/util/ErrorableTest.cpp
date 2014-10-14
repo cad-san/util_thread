@@ -30,3 +30,24 @@ TEST(Errorable, ConstructError)
     CHECK_EQUAL(true, value.isError());
     CHECK_EQUAL(error.get(), value.getError().get());
 }
+
+TEST(Errorable, AssignValue)
+{
+    Errorable<int> value;
+
+    value = 10;
+
+    CHECK_EQUAL(false, value.isError());
+    LONGS_EQUAL(10, value.getValue());
+}
+
+TEST(Errorable, AssignError)
+{
+    Errorable<int> value;
+    Error<std::string> error("Invalid Type");
+
+    value = error;
+
+    CHECK_EQUAL(true, value.isError());
+    CHECK_EQUAL(error.get(), value.getError().get());
+}

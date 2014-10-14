@@ -4,7 +4,7 @@
 template <typename ErrorType>
 class Error {
 private:
-    const ErrorType error_;
+    ErrorType error_;
 
 public:
     Error()
@@ -26,6 +26,11 @@ private:
     Error<ErrorType> error_;
 
 public:
+    Errorable()
+        : valid_(true),
+          value_(),
+          error_() {}
+
     explicit
     Errorable(const Error<ErrorType>& error)
         : valid_(false),
@@ -37,6 +42,22 @@ public:
         : valid_(true),
           value_(value),
           error_() {}
+
+    Errorable& operator=(const Error<ErrorType>& error)
+    {
+        valid_ = false;
+        value_ = ValueType();
+        error_ = error;
+        return *this;
+    }
+
+    Errorable& operator=(const ValueType& value)
+    {
+        valid_ = true;
+        value_ = value;
+        error_ = Error<ErrorType>();
+        return *this;
+    }
 
     bool isError() const { return !valid_; }
 
