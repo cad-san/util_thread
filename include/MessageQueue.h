@@ -6,6 +6,9 @@
 
 template<typename MsgType>
 class MessageQueue {
+public:
+    typedef std::queue<int>::size_type size_type;
+
 private:
     std::queue<MsgType> queue_;
     mutable pthread_mutex_t guard_;
@@ -51,10 +54,10 @@ public:
         return message;
     }
 
-    unsigned int size() const
+    size_type size() const
     {
         queue_lock();
-        unsigned int ret = queue_.size();
+        size_type ret = queue_.size();
         queue_unlock();
         return ret;
     }
