@@ -31,13 +31,11 @@ public:
           value_(),
           error_() {}
 
-    explicit
     Errorable(const Error<ErrorType>& error)
         : valid_(false),
           value_(),
           error_(error) {}
 
-    explicit
     Errorable(const ValueType& value)
         : valid_(true),
           value_(value),
