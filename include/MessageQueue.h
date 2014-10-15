@@ -11,9 +11,13 @@ class MessageQueue {
 public:
     typedef std::queue<int>::size_type size_type;
 
+    static const size_type DEFAULT_QUEUE_MAX = 20;
+
 private:
     std::queue<MsgType> queue_;
     mutable pthread_mutex_t guard_;
+
+    const size_type queue_max_;
 
     void queue_lock() const
     {
@@ -27,6 +31,14 @@ private:
 
 public:
     MessageQueue()
+        : queue_max_(DEFAULT_QUEUE_MAX)
+    {
+        pthread_mutex_init(&guard_, NULL);
+    }
+
+    explicit
+    MessageQueue(size_type max_size)
+        : queue_max_(max_size)
     {
         pthread_mutex_init(&guard_, NULL);
     }
@@ -73,6 +85,15 @@ public:
         return ret;
     }
 
+    size_type max() const
+    {
+        return queue_max_;
+    }
+
+    bool full() const
+    {
+        return !(this->size() < this->max());
+    }
 };
 
 #endif

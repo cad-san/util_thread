@@ -53,3 +53,11 @@ TEST(MessageQueue, EmptyRecv)
     CHECK_EQUAL(true, actual.isError());
     LONGS_EQUAL(0, queue.size());
 }
+
+TEST(MessageQueue, Full)
+{
+    MessageQueue<std::string> queue(1);
+
+    CHECK_EQUAL(true, queue.send("message"));
+    CHECK_EQUAL(true, queue.full());
+}
