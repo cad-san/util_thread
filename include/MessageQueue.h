@@ -57,7 +57,15 @@ public:
     size_type size() const
     {
         queue_lock();
-        size_type ret = queue_.size();
+        auto ret = queue_.size();
+        queue_unlock();
+        return ret;
+    }
+
+    bool empty() const
+    {
+        queue_lock();
+        auto ret = queue_.empty();
         queue_unlock();
         return ret;
     }

@@ -19,6 +19,7 @@ TEST(MessageQueue, Init)
     MessageQueue<int> queue;
 
     LONGS_EQUAL(0, queue.size());
+    CHECK_EQUAL(true, queue.empty());
 }
 
 TEST(MessageQueue, Send)
@@ -37,7 +38,7 @@ TEST(MessageQueue, Recv)
     std::string expect = "message";
 
     queue.send(expect);
-    std::string actual = queue.recv();
+    auto actual = queue.recv();
 
     CHECK_EQUAL(expect, actual);
     LONGS_EQUAL(0, queue.size());
