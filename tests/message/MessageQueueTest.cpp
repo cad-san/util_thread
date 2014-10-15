@@ -40,6 +40,16 @@ TEST(MessageQueue, Recv)
     queue.send(expect);
     auto actual = queue.recv();
 
-    CHECK_EQUAL(expect, actual);
+    CHECK_EQUAL(expect, actual.getValue());
+    LONGS_EQUAL(0, queue.size());
+}
+
+TEST(MessageQueue, EmptyRecv)
+{
+    MessageQueue<std::string> queue;
+
+    auto actual = queue.recv();
+
+    CHECK_EQUAL(true, actual.isError());
     LONGS_EQUAL(0, queue.size());
 }

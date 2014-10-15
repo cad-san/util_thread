@@ -1,6 +1,8 @@
 #ifndef D_MESSAGE_QUEUE_H
 #define D_MESSAGE_QUEUE_H
 
+#include "Errorable.h"
+
 #include <queue>
 #include <pthread.h>
 
@@ -33,24 +35,25 @@ public:
 
     bool send( const MsgType& message )
     {
-        queue_lock();
-
         /* メッセージキューに登録 */
+        queue_lock();
         queue_.push(message);
-
         queue_unlock();
+
         return true;
     }
 
-    MsgType recv()
+    Errorable<MsgType> recv()
     {
-        queue_lock();
+        if(this->empty())
+            return Error<std::string>("no message");
 
         /* メッセージキューから取り出して削除 */
+        queue_lock();
         MsgType message = queue_.front();
         queue_.pop();
-
         queue_unlock();
+
         return message;
     }
 
