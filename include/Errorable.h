@@ -59,9 +59,8 @@ public:
 
     bool isError() const { return !valid_; }
 
-    ValueType getValue() const { return value_; }
-
-    Error<ErrorType> getError() const { return error_; }
+    const ValueType& getValue() const { return value_; }
+    const Error<ErrorType>& getError() const { return error_; }
 };
 
 #endif
