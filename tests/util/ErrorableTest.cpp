@@ -3,6 +3,8 @@
 #include "Errorable.h"
 #include <string>
 
+static const std::string ERR_INVALID_TYPE = "Invalid Type";
+
 TEST_GROUP(Errorable)
 {
     void setup()
@@ -14,7 +16,7 @@ TEST_GROUP(Errorable)
     }
 };
 
-TEST(Errorable, ConstructtValue)
+TEST(Errorable, ConstructValue)
 {
     Errorable<int> value(10);
 
@@ -24,11 +26,11 @@ TEST(Errorable, ConstructtValue)
 
 TEST(Errorable, ConstructError)
 {
-    Error<std::string> error("Invalid Type");
+    Error<std::string> error(ERR_INVALID_TYPE);
     Errorable<int> value(error);
 
     CHECK_EQUAL(true, value.isError());
-    CHECK_EQUAL(error.get(), value.getError().get());
+    CHECK_EQUAL(ERR_INVALID_TYPE, value.getError().get());
 }
 
 TEST(Errorable, AssignValue)
@@ -44,12 +46,11 @@ TEST(Errorable, AssignValue)
 TEST(Errorable, AssignError)
 {
     Errorable<int> value;
-    Error<std::string> error("Invalid Type");
 
-    value = error;
+    value = Error<std::string>(ERR_INVALID_TYPE);
 
     CHECK_EQUAL(true, value.isError());
-    CHECK_EQUAL(error.get(), value.getError().get());
+    CHECK_EQUAL(ERR_INVALID_TYPE, value.getError().get());
 }
 
 TEST(Errorable,ConstructAssignValue)
@@ -62,9 +63,8 @@ TEST(Errorable,ConstructAssignValue)
 
 TEST(Errorable,ConstructAssignError)
 {
-    Error<std::string> error("Invalid Type");
-    Errorable<int> value = error;
+    Errorable<int> value = Error<std::string>(ERR_INVALID_TYPE);
 
     CHECK_EQUAL(true, value.isError());
-    CHECK_EQUAL(error.get(), value.getError().get());
+    CHECK_EQUAL(ERR_INVALID_TYPE, value.getError().get());
 }
