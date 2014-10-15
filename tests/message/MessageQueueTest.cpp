@@ -61,3 +61,13 @@ TEST(MessageQueue, Full)
     CHECK_EQUAL(true, queue.send("message"));
     CHECK_EQUAL(true, queue.full());
 }
+
+TEST(MessageQueue, FullSend)
+{
+    MessageQueue<std::string> queue(1);
+
+    CHECK_EQUAL(true, queue.send("become full"));
+
+    CHECK_EQUAL(false, queue.send("not send"));
+    CHECK_EQUAL(true, queue.full());
+}

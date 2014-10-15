@@ -47,6 +47,9 @@ public:
 
     bool send( const MsgType& message )
     {
+        if(this->full())
+            return false;
+
         /* メッセージキューに登録 */
         queue_lock();
         queue_.push(message);
