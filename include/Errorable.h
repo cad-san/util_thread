@@ -15,6 +15,15 @@ public:
         : error_(error) {}
 
     const ErrorType& get() const { return error_; }
+
+    /* コピー・ムーブはpublic default属性 */
+    Error(Error const&) = default;
+    Error(Error &&) = default;
+    Error& operator=(Error const&) = default;
+    Error& operator=(Error &&) = default;
+
+    /* デストラクタはpublic default */
+    ~Error() = default;
 };
 
 template <typename ValueType, typename ErrorType=std::string>
@@ -61,6 +70,15 @@ public:
 
     const ValueType& getValue() const { return value_; }
     const Error<ErrorType>& getError() const { return error_; }
+
+    /* コピー・ムーブはpublic default属性 */
+    Errorable(Errorable const&) = default;
+    Errorable(Errorable &&) = default;
+    Errorable& operator=(Errorable const&) = default;
+    Errorable& operator=(Errorable &&) = default;
+
+    /* デストラクタはpublic default */
+    ~Errorable() = default;
 };
 
 #endif
