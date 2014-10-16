@@ -66,6 +66,22 @@ public:
         return true;
     }
 
+    bool send_wait( const MsgType& message )
+    {
+        queue_lock();
+
+        /* キューに空きができるまで待つ */
+        while(!(queue_.size() < this->max()))
+            pthread_cond_wait(&recv_event_, &guard_);
+
+        /* メッセージキューに登録 */
+        queue_.push(message);
+        pthread_cond_signal(&send_event_);
+
+        queue_unlock();
+        return true;
+    }
+
     Errorable<MsgType> recv()
     {
         if(this->empty())
@@ -75,6 +91,7 @@ public:
         queue_lock();
         MsgType message = queue_.front();
         queue_.pop();
+        pthread_cond_signal(&recv_event_);
         queue_unlock();
 
         return message;
@@ -91,6 +108,7 @@ public:
         /* メッセージキューから取り出して削除 */
         MsgType message = queue_.front();
         queue_.pop();
+        pthread_cond_signal(&recv_event_);
 
         queue_unlock();
         return message;
