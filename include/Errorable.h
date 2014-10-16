@@ -14,7 +14,7 @@ public:
     Error( const ErrorType& error )
         : error_(error) {}
 
-    const ErrorType& get() const { return error_; }
+    const ErrorType& what() const { return error_; }
 
     /* コピー・ムーブはpublic default属性 */
     Error(Error const&) = default;

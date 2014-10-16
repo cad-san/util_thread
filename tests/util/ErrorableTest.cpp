@@ -30,7 +30,7 @@ TEST(Errorable, ConstructError)
     Errorable<int> value(error);
 
     CHECK_EQUAL(true, value.isError());
-    CHECK_EQUAL(ERR_INVALID_TYPE, value.getError().get());
+    CHECK_EQUAL(ERR_INVALID_TYPE, value.getError().what());
 }
 
 TEST(Errorable, AssignValue)
@@ -50,7 +50,7 @@ TEST(Errorable, AssignError)
     value = Error<std::string>(ERR_INVALID_TYPE);
 
     CHECK_EQUAL(true, value.isError());
-    CHECK_EQUAL(ERR_INVALID_TYPE, value.getError().get());
+    CHECK_EQUAL(ERR_INVALID_TYPE, value.getError().what());
 }
 
 TEST(Errorable,ConstructAssignValue)
@@ -66,7 +66,7 @@ TEST(Errorable,ConstructAssignError)
     Errorable<int> value = Error<std::string>(ERR_INVALID_TYPE);
 
     CHECK_EQUAL(true, value.isError());
-    CHECK_EQUAL(ERR_INVALID_TYPE, value.getError().get());
+    CHECK_EQUAL(ERR_INVALID_TYPE, value.getError().what());
 }
 
 TEST(Errorable, ExceptionGetValue)
