@@ -17,6 +17,9 @@ private:
     std::queue<MsgType> queue_;
     mutable pthread_mutex_t guard_;
 
+    pthread_cond_t send_event_;
+    pthread_cond_t recv_event_;
+
     const size_type queue_max_;
 
     void queue_lock() const
@@ -34,6 +37,8 @@ public:
         : queue_max_(DEFAULT_QUEUE_MAX)
     {
         pthread_mutex_init(&guard_, NULL);
+        pthread_cond_init(&send_event_, NULL);
+        pthread_cond_init(&recv_event_, NULL);
     }
 
     explicit
@@ -41,6 +46,8 @@ public:
         : queue_max_(max_size)
     {
         pthread_mutex_init(&guard_, NULL);
+        pthread_cond_init(&send_event_, NULL);
+        pthread_cond_init(&recv_event_, NULL);
     }
 
     ~MessageQueue() {}
@@ -53,6 +60,7 @@ public:
         /* メッセージキューに登録 */
         queue_lock();
         queue_.push(message);
+        pthread_cond_signal(&send_event_);
         queue_unlock();
 
         return true;
@@ -69,6 +77,22 @@ public:
         queue_.pop();
         queue_unlock();
 
+        return message;
+    }
+
+    Errorable<MsgType> recv_wait()
+    {
+        queue_lock();
+
+        /* 受診するまで待つ */
+        while(queue_.empty())
+            pthread_cond_wait(&send_event_, &guard_);
+
+        /* メッセージキューから取り出して削除 */
+        MsgType message = queue_.front();
+        queue_.pop();
+
+        queue_unlock();
         return message;
     }
 
