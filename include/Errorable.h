@@ -68,8 +68,21 @@ public:
 
     bool isError() const { return !valid_; }
 
-    const ValueType& getValue() const { return value_; }
-    const Error<ErrorType>& getError() const { return error_; }
+    const ValueType& getValue() const
+    {
+        if(this->isError())
+            throw std::logic_error("this is error object");
+
+        return value_;
+    }
+
+    const Error<ErrorType>& getError() const
+    {
+        if(!this->isError())
+            throw std::logic_error("this is value object");
+
+        return error_;
+    }
 
     /* コピー・ムーブはpublic default属性 */
     Errorable(Errorable const&) = default;

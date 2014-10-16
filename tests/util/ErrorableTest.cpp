@@ -68,3 +68,17 @@ TEST(Errorable,ConstructAssignError)
     CHECK_EQUAL(true, value.isError());
     CHECK_EQUAL(ERR_INVALID_TYPE, value.getError().get());
 }
+
+TEST(Errorable, ExceptionGetValue)
+{
+    Errorable<int> value = Error<std::string>(ERR_INVALID_TYPE);
+
+    CHECK_THROWS(std::logic_error, value.getValue());
+}
+
+TEST(Errorable, ExceptionGetError)
+{
+    Errorable<int> value = 10;
+
+    CHECK_THROWS(std::logic_error, value.getError());
+}
