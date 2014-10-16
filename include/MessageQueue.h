@@ -9,7 +9,7 @@
 template<typename MsgType>
 class MessageQueue {
 public:
-    typedef std::queue<int>::size_type size_type;
+    typedef typename std::queue<MsgType>::size_type size_type;
 
     static const size_type DEFAULT_QUEUE_MAX = 20;
 
