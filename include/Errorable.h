@@ -1,6 +1,8 @@
 #ifndef D_ERRORABLE_H
 #define D_ERRORABLE_H
 
+#include <stdexcept>
+
 template <typename ErrorType>
 class Error {
 private:
