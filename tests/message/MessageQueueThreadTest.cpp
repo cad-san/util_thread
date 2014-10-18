@@ -5,20 +5,12 @@
 #include <string>
 #include <future>
 
-template<typename MsgType>
-Errorable<MsgType> recv_wait_async( const std::shared_ptr< MessageQueue<MsgType> >& queue )
-{
-    return queue->recv_wait();
-}
-
-template<typename MsgType>
-bool send_wait_async( const std::shared_ptr< MessageQueue<MsgType> >& queue, MsgType message )
-{
-    return queue->send_wait(message);
-}
-
 TEST_GROUP(MessageQueueThread)
 {
+    typedef int MsgType;
+    typedef MessageQueue<MsgType> MsgQueue;
+    typedef std::shared_ptr< MsgQueue > MsgQueuePtr;
+
     void setup()
     {
     }
@@ -26,14 +18,24 @@ TEST_GROUP(MessageQueueThread)
     void teardown()
     {
     }
+
+    static Errorable<MsgType> recv_wait_async( const MsgQueuePtr& queue )
+    {
+        return queue->recv_wait();
+    }
+
+    static bool send_wait_async( const MsgQueuePtr& queue, MsgType message )
+    {
+        return queue->send_wait(message);
+    }
 };
 
 TEST(MessageQueueThread, RecvWait)
 {
-    auto queue = std::make_shared< MessageQueue<int> >();
+    auto queue = std::make_shared< MsgQueue >();
 
     /* 非同期で受信処理を立ち上げる(無限長待機) */
-    auto result = std::async(std::launch::async, recv_wait_async<int>, queue);
+    auto result = std::async(std::launch::async, recv_wait_async, queue);
 
     /* キューに積む */
     queue->send(1);
@@ -47,13 +49,13 @@ TEST(MessageQueueThread, RecvWait)
 TEST(MessageQueueThread, SendWait)
 {
     /* 最大1つで初期化 */
-    auto queue = std::make_shared< MessageQueue<int> >(1);
+    auto queue = std::make_shared< MsgQueue >(1);
 
     /* キューに積む(FULL状態) */
     queue->send_wait(1);
 
     /* 非同期で送信処理を立ち上げる(無限長待機) */
-    auto result = std::async(std::launch::async, send_wait_async<int>, queue, 2);
+    auto result = std::async(std::launch::async, send_wait_async, queue, 2);
 
     /* キューを減らす(受信→送信走る→FULL状態) */
     queue->recv();
