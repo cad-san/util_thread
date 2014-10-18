@@ -2,10 +2,13 @@
 language: cpp
 compiler:
   - gcc
+  - clang
 env:
   matrix:
   - BUILD_TARGET=test
   - BUILD_TARGET=release
+before_install:
+  - ./scripts/travis_ci_setup_compiler.sh
 install:
   - sudo easy_install cpp-coveralls
 before_script:
