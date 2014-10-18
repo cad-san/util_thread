@@ -2,10 +2,10 @@
 # build script for Travis CI
 
 if [ "$BUILD_TARGET" = "test" ]; then
-    if [ "$CC" = "gcc" ]; then
-        make gcov || exit 1
-    else
+    if [ "$CC" = "clang" ]; then
         make test || exit 1
+    else
+        make gcov || exit 1
     fi
 fi
 
