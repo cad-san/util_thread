@@ -26,6 +26,12 @@ private:
 
     const size_type queue_max_;
 
+    /* コピー・ムーブは削除 */
+    MessageQueue(MessageQueue const&) = delete;
+    MessageQueue(MessageQueue &&) = delete;
+    MessageQueue& operator=(MessageQueue const&) = delete;
+    MessageQueue& operator=(MessageQueue &&) = delete;
+
     void queue_lock_init()
     {
         pthread_mutexattr_t attr;
@@ -82,7 +88,12 @@ public:
         pthread_cond_init(&recv_event_, NULL);
     }
 
-    ~MessageQueue() {}
+    virtual ~MessageQueue()
+    {
+        pthread_cond_destroy(&send_event_);
+        pthread_cond_destroy(&recv_event_);
+        pthread_mutex_destroy(&guard_);
+    }
 
     bool send( const MsgType& message )
     {
