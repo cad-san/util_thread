@@ -47,6 +47,23 @@ private:
         pthread_mutex_unlock(&guard_);
     }
 
+    bool send_critical( const MsgType& message )
+    {
+        /* メッセージキューに登録 */
+        queue_.push(message);
+        pthread_cond_signal(&send_event_);
+        return true;
+    }
+
+    Errorable<MsgType> recv_critical()
+    {
+        /* メッセージキューから取り出して削除 */
+        MsgType message = queue_.front();
+        queue_.pop();
+        pthread_cond_signal(&recv_event_);
+        return message;
+    }
+
 public:
     MessageQueue()
         : queue_max_(DEFAULT_QUEUE_MAX)
@@ -72,13 +89,12 @@ public:
         if(this->full())
             return false;
 
-        /* メッセージキューに登録 */
+        /* 送信 */
         queue_lock();
-        queue_.push(message);
-        pthread_cond_signal(&send_event_);
+        auto result = send_critical(message);
         queue_unlock();
 
-        return true;
+        return result;
     }
 
     bool send_wait( const MsgType& message )
@@ -89,12 +105,11 @@ public:
         while(this->full())
             pthread_cond_wait(&recv_event_, &guard_);
 
-        /* メッセージキューに登録 */
-        queue_.push(message);
-        pthread_cond_signal(&send_event_);
+        /* 送信 */
+        auto result = send_critical(message);
 
         queue_unlock();
-        return true;
+        return result;
     }
 
     Errorable<MsgType> recv()
@@ -102,11 +117,9 @@ public:
         if(this->empty())
             return Error<std::string>("no message");
 
-        /* メッセージキューから取り出して削除 */
+        /* 受信 */
         queue_lock();
-        MsgType message = queue_.front();
-        queue_.pop();
-        pthread_cond_signal(&recv_event_);
+        auto message = recv_critical();
         queue_unlock();
 
         return message;
@@ -120,10 +133,8 @@ public:
         while(this->empty())
             pthread_cond_wait(&send_event_, &guard_);
 
-        /* メッセージキューから取り出して削除 */
-        MsgType message = queue_.front();
-        queue_.pop();
-        pthread_cond_signal(&recv_event_);
+        /* 受信 */
+        auto message = recv_critical();
 
         queue_unlock();
         return message;
