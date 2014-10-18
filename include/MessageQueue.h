@@ -6,6 +6,10 @@
 #include <queue>
 #include <pthread.h>
 
+#ifndef PTHREAD_MUTEX_RECURSIVE_NP
+#define PTHREAD_MUTEX_RECURSIVE_NP PTHREAD_MUTEX_RECURSIVE
+#endif
+
 template<typename MsgType>
 class MessageQueue {
 public:
@@ -22,6 +26,17 @@ private:
 
     const size_type queue_max_;
 
+    void queue_lock_init()
+    {
+        pthread_mutexattr_t attr;
+        pthread_mutexattr_init(&attr);
+        pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE_NP);
+
+        pthread_mutex_init(&guard_, &attr);
+
+        pthread_mutexattr_destroy(&attr);
+    }
+
     void queue_lock() const
     {
         pthread_mutex_lock(&guard_);
@@ -36,7 +51,7 @@ public:
     MessageQueue()
         : queue_max_(DEFAULT_QUEUE_MAX)
     {
-        pthread_mutex_init(&guard_, NULL);
+        queue_lock_init();
         pthread_cond_init(&send_event_, NULL);
         pthread_cond_init(&recv_event_, NULL);
     }
@@ -45,7 +60,7 @@ public:
     MessageQueue(size_type max_size)
         : queue_max_(max_size)
     {
-        pthread_mutex_init(&guard_, NULL);
+        queue_lock_init();
         pthread_cond_init(&send_event_, NULL);
         pthread_cond_init(&recv_event_, NULL);
     }
@@ -71,7 +86,7 @@ public:
         queue_lock();
 
         /* キューに空きができるまで待つ */
-        while(!(queue_.size() < this->max()))
+        while(this->full())
             pthread_cond_wait(&recv_event_, &guard_);
 
         /* メッセージキューに登録 */
@@ -102,7 +117,7 @@ public:
         queue_lock();
 
         /* 受診するまで待つ */
-        while(queue_.empty())
+        while(this->empty())
             pthread_cond_wait(&send_event_, &guard_);
 
         /* メッセージキューから取り出して削除 */
