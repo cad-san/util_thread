@@ -83,7 +83,7 @@ TEST(MessageQueueThread, RecvTimedWait)
 
     UtilTime time_out = 0.5; /* sec */
 
-    /* 非同期で受信処理を立ち上げる(無限長待機) */
+    /* 非同期で受信処理を立ち上げる(0.5秒待機) */
     auto result = std::async(std::launch::async, recv_time_wait_async, queue, time_out);
 
     /* キューに積む */
