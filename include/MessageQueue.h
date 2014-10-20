@@ -109,6 +109,32 @@ public:
         return result;
     }
 
+    bool send_wait( const MsgType& message, const UtilTime& time )
+    {
+        queue_lock();
+
+        /* キューに空きができるまで待つ */
+        if(this->full()) {
+            UtilTime expect = UtilTime::now() + time;
+
+            /* 指定時刻まで待つ */
+            int err = pthread_cond_timedwait(&recv_event_, &guard_, &expect);
+
+            /* タイムアウト */
+            if(err == ETIMEDOUT) {
+                queue_unlock();
+                return false;
+            }
+
+        }
+
+        /* 送信 */
+        auto result = send_critical(message);
+
+        queue_unlock();
+        return result;
+    }
+
     bool send_wait( const MsgType& message )
     {
         queue_lock();
