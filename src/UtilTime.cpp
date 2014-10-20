@@ -10,6 +10,14 @@ UtilTime::UtilTime()
     this->tv_nsec = 0;
 }
 
+UtilTime::UtilTime(const double& second)
+{
+    UtilTime expect = convert_time(second);
+
+    this->tv_sec = expect.tv_sec;
+    this->tv_nsec = expect.tv_nsec;
+}
+
 UtilTime::UtilTime(const UtilTime& rhs)
 {
     this->tv_sec = rhs.tv_sec;
