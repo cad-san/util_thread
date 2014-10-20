@@ -3,7 +3,7 @@
 
 #include <time.h>
 
-struct UtilTime : timespec
+class UtilTime : public timespec
 {
 private:
     typedef time_t util_sec;
