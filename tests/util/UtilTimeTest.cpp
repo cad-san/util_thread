@@ -12,6 +12,14 @@ TEST_GROUP(UtilTime)
     }
 };
 
+TEST(UtilTime, InitFloat)
+{
+    UtilTime time = 1.1;
+
+    LONGS_EQUAL(1, time.tv_sec);
+    LONGS_EQUAL(100 * UtilTime::MSEC_BASE, time.tv_nsec);
+}
+
 TEST(UtilTime, SimpleAdd)
 {
     UtilTime base;

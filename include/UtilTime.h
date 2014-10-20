@@ -22,6 +22,7 @@ public:
 
 public:
     UtilTime();
+    UtilTime(const double& second);
     UtilTime(const UtilTime& rhs);
     virtual ~UtilTime();
 

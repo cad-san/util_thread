@@ -2,6 +2,7 @@
 #define D_MESSAGE_QUEUE_H
 
 #include "Errorable.h"
+#include "UtilTime.h"
 
 #include <queue>
 #include <pthread.h>
@@ -108,6 +109,32 @@ public:
         return result;
     }
 
+    bool send_wait( const MsgType& message, const UtilTime& time )
+    {
+        queue_lock();
+
+        /* キューに空きができるまで待つ */
+        if(this->full()) {
+            UtilTime expect = UtilTime::now() + time;
+
+            /* 指定時刻まで待つ */
+            int err = pthread_cond_timedwait(&recv_event_, &guard_, &expect);
+
+            /* タイムアウト */
+            if(err == ETIMEDOUT) {
+                queue_unlock();
+                return false;
+            }
+
+        }
+
+        /* 送信 */
+        auto result = send_critical(message);
+
+        queue_unlock();
+        return result;
+    }
+
     bool send_wait( const MsgType& message )
     {
         queue_lock();
@@ -143,6 +170,30 @@ public:
         /* 受診するまで待つ */
         while(this->empty())
             pthread_cond_wait(&send_event_, &guard_);
+
+        /* 受信 */
+        auto message = recv_critical();
+
+        queue_unlock();
+        return message;
+    }
+
+    Errorable<MsgType> recv_wait(const UtilTime& time)
+    {
+        queue_lock();
+
+        if(this->empty()) {
+            UtilTime expect = UtilTime::now() + time;
+
+            /* 指定時刻まで待つ */
+            int err = pthread_cond_timedwait(&send_event_, &guard_, &expect);
+
+            /* タイムアウト */
+            if(err == ETIMEDOUT) {
+                queue_unlock();
+                return Error<std::string>("time out");
+            }
+        }
 
         /* 受信 */
         auto message = recv_critical();
