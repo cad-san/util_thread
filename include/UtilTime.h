@@ -3,7 +3,7 @@
 
 #include <time.h>
 
-struct UtilTime : timespec
+class UtilTime : public timespec
 {
 private:
     typedef time_t util_sec;
@@ -18,6 +18,9 @@ public:
     static const int MSEC_BASE;
     static const int NSEC_BASE;
 
+    static UtilTime now();
+
+public:
     UtilTime();
     UtilTime(const UtilTime& rhs);
     virtual ~UtilTime();

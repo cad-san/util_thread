@@ -196,9 +196,7 @@ const UtilTime UtilThread::getIntervalTime() const
 
 const UtilTime UtilThread::getBaseTime() const
 {
-    UtilTime base;
-    clock_gettime(CLOCK_REALTIME, &base);
-    return base;
+    return UtilTime::now();
 }
 
 const UtilTime UtilThread::getNextTime(const UtilTime& base) const
