@@ -92,3 +92,10 @@ UtilTime& UtilTime::operator+=(const double& time)
     *this += addition;
     return *this;
 }
+
+UtilTime UtilTime::now()
+{
+    UtilTime curr_time;
+    clock_gettime(CLOCK_REALTIME, &curr_time);
+    return curr_time;
+}

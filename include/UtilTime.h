@@ -18,6 +18,9 @@ public:
     static const int MSEC_BASE;
     static const int NSEC_BASE;
 
+    static UtilTime now();
+
+public:
     UtilTime();
     UtilTime(const UtilTime& rhs);
     virtual ~UtilTime();
