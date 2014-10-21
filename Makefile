@@ -7,6 +7,8 @@ clean:
 	else make clean_release; \
 	fi
 
+clean_all: clean CppUTestClean
+
 test: CppUTest CppUTestExt
 	make -f scripts/cpputest.mk
 
@@ -32,8 +34,11 @@ CppUTest: cpputest/lib/libCppUTest.a
 
 CppUTestExt: cpputest/lib/libCppUTestExt.a
 
+CppUTestClean:
+	make -i -C cpputest -f Makefile_using_MakefileWorker clean
+	make -i -C cpputest -f Makefile_using_MakefileWorker cleanExtensions
+
 cpputest/lib/libCppUTest.a:
-	pwd
 	make -i -C cpputest -f Makefile_using_MakefileWorker
 
 cpputest/lib/libCppUTestExt.a:
