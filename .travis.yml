@@ -8,11 +8,11 @@ env:
   - BUILD_TARGET=test
   - BUILD_TARGET=release
 before_install:
-  - ./scripts/travis_ci_setup_compiler.sh
+  - ./scripts/travis_ci/setup_compiler.sh
 install:
   - sudo easy_install cpp-coveralls
 before_script:
 script:
-  - ./scripts/travis_ci_build.sh
+  - ./scripts/travis_ci/build.sh
 after_success:
-  - ./scripts/coveralls.sh
+  - ./scripts/travis_ci/coveralls.sh
