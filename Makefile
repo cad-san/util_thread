@@ -3,8 +3,8 @@ all: test
 
 clean:
 	@if [ -e cpputest/Makefile_using_MakefileWorker ]; \
-	then make cleanTest; \
-	else make cleanRelease; \
+	then make clean_test; \
+	else make clean_release; \
 	fi
 
 test: CppUTest CppUTestExt
@@ -13,13 +13,13 @@ test: CppUTest CppUTestExt
 gcov: CppUTest CppUTestExt clean
 	make -f scripts/cpputest.mk CPPUTEST_USE_GCOV=Y gcov
 
-cleanTest:
+clean_test:
 	make -i -f scripts/cpputest.mk clean
 
 release: clean
 	make -f scripts/release.mk
 
-cleanRelease:
+clean_release:
 	make -i -f scripts/release.mk clean
 
 format:
