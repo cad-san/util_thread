@@ -8,25 +8,25 @@ clean:
 	fi
 
 test: CppUTest CppUTestExt
-	make -f scripts/MakefileCppUTest.mk
+	make -f scripts/cpputest.mk
 
 gcov: CppUTest CppUTestExt clean
-	make -f scripts/MakefileCppUTest.mk CPPUTEST_USE_GCOV=Y gcov
+	make -f scripts/cpputest.mk CPPUTEST_USE_GCOV=Y gcov
 
 cleanTest:
-	make -i -f scripts/MakefileCppUTest.mk clean
+	make -i -f scripts/cpputest.mk clean
 
 release: clean
-	make -f scripts/MakefileRelease.mk
+	make -f scripts/release.mk
 
 cleanRelease:
-	make -i -f scripts/MakefileRelease.mk clean
+	make -i -f scripts/release.mk clean
 
 format:
-	make -i -f scripts/MakefileUtil.mk uncrustify
+	make -i -f scripts/utility.mk uncrustify
 
 check:
-	make -i -f scripts/MakefileUtil.mk cppcheck
+	make -i -f scripts/utility.mk cppcheck
 
 CppUTest: cpputest/lib/libCppUTest.a
 
