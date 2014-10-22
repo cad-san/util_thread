@@ -28,5 +28,7 @@ public:
     bool stop();
 
     ssize_t send(const char buffer[], const size_t size);
+
+    bool isActive() const;
 };
 #endif

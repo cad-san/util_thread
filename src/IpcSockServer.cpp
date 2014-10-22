@@ -7,12 +7,14 @@ IpcSockServer::IpcSockServer(const std::string& path,
                              const int queue_size, const UtilTime& timeout) :
     path_(path),
     queue_size_(queue_size),
-    timeout_(timeout)
+    timeout_(timeout),
+    sock_(-1)
 {
 }
 
 IpcSockServer::~IpcSockServer()
 {
+    stop();
 }
 
 bool IpcSockServer::init()
@@ -62,8 +64,16 @@ FAIL:
 
 bool IpcSockServer::stop()
 {
+    if(!isActive()) {
+        return false;
+    }
+
     close(sock_);
     remove(path_.c_str());
+
+    /* パラメータ上書き */
+    this->sock_ = -1;
+
     return true;
 }
 
@@ -98,4 +108,9 @@ ssize_t IpcSockServer::recv(char buffer[], size_t size)
 
     close(sock_fd);
     return recv_size;
+}
+
+bool IpcSockServer::isActive() const
+{
+    return (this->sock_ != -1);
 }

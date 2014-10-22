@@ -36,5 +36,7 @@ public:
     bool stop();
 
     ssize_t recv(char buffer[], size_t size);
+
+    bool isActive() const;
 };
 #endif

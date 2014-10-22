@@ -4,12 +4,14 @@
 #include <unistd.h>
 
 IpcSockClient::IpcSockClient(const std::string& path) :
-    path_(path)
+    path_(path),
+    sock_(-1)
 {
 }
 
 IpcSockClient::~IpcSockClient()
 {
+    stop();
 }
 
 bool IpcSockClient::init()
@@ -49,8 +51,16 @@ FAIL:
 
 bool IpcSockClient::stop()
 {
+    if(!isActive()) {
+        return false;
+    }
+
     close(sock_);
-    return false;
+
+    /* パラメータ上書き */
+    this->sock_ = -1;
+
+    return true;
 }
 
 ssize_t IpcSockClient::send(const char buffer[], const size_t size)
@@ -62,4 +72,9 @@ ssize_t IpcSockClient::send(const char buffer[], const size_t size)
     }
 
     return send_size;
+}
+
+bool IpcSockClient::isActive() const
+{
+    return (this->sock_ != -1);
 }
