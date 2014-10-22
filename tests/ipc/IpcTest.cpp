@@ -31,3 +31,14 @@ TEST(Ipc, ServerSingle)
     CHECK_EQUAL(true, started);
     CHECK_EQUAL(true, stoped);
 }
+
+TEST(Ipc, ClientSingle)
+{
+    IpcSockClient client(dummy_path);
+
+    bool initted = client.init();
+    bool started = client.start(); /* サーバ起動していないためfail */
+
+    CHECK_EQUAL(true, initted);
+    CHECK_EQUAL(false, started);
+}
