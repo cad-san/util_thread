@@ -14,6 +14,7 @@ TEST_SRC_DIRS = \
 	$(PROJECT_HOME_DIR)/tests\
 	$(PROJECT_HOME_DIR)/tests/thread\
 	$(PROJECT_HOME_DIR)/tests/message\
+	$(PROJECT_HOME_DIR)/tests/ipc\
 	$(PROJECT_HOME_DIR)/tests/util\
 
 INC_DIRS = \
