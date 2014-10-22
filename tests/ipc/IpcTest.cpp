@@ -1,7 +1,7 @@
 #include "CppUTest/TestHarness.h"
 
 #include "IpcSockServer.h"
-#include "IpcSocKClient.h"
+#include "IpcSockClient.h"
 #include <future>
 
 static const std::string dummy_path = "/tmp/test-socket";
